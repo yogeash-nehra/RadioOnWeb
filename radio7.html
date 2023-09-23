@@ -1,0 +1,372 @@
+<html>
+    <head>
+        <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" rel="stylesheet"></link>
+      </head>
+<body>
+
+
+<!-- <audio id="BhajanAudio">  <source src="https://azura.shoutca.st/radio/8200/radio.mp3?1596071186" type="audio/mpeg"></source></audio> -->
+
+<audio id="SatsangAudio">  <source src="https://azura.shoutca.st/radio/8200/radio.mp3?1596071186" type="audio/mpeg"></source></audio>
+
+<audio id="GurubaniAudio">  <source src="https://gurbanikirtan.radioca.st/start.mp3" type="audio/mpeg"></source></audio>
+
+<audio id="AnyAudio" onended="SelectAnotherBhajan()">  <source src="https://azura.shoutca.st/radio/8200/radio.mp3?1596071186" type="audio/mpeg"></source></audio>
+<audio id="ShabadAudio" onended="SelectAnotherShabad()">  <source src="" type="audio/mpeg"></source></audio>
+
+<div class="text-center" id="maincontents">
+<h1 style="color: mediumseagreen;">
+सचखंड की आवाज़</h1>
+<div id="waitDiv" div.style.display = "none">GuruBox Radio</div>
+<div class="horizontal-line"></div>
+<h2 style="color: #FF901E;">Gurubani गुरुबानी radio</h2>
+<button id="gurubaniPlay" onclick="playGurubaniAudio()" type="button"><span class="glyphicon glyphicon-play"></span></button>
+<button onclick="pauseGurubaniAudio()" type="button"><span class="glyphicon glyphicon-pause"></span></button> 
+<br />
+
+<div class="horizontal-line"></div>
+<h2 style="color: #FF901E;;">Satsang रूहानी सत्संग radio</h2>
+<button class="glyphicon glyphicon-play" id="btnAnyRadioON" onclick="RunAnyRadio()" type="button"></button> 
+<button onclick="pauseSatsangAudio()" type="button"><span class="glyphicon glyphicon-pause"></span></button> 
+<button onclick="RunAnyRadio()" type="button"><span class="glyphicon glyphicon-step-forward"></span></button> 
+<br />
+
+<div class="horizontal-line"></div>
+<h2 style="color: #FF901E;">Bhajan शब्द radio</h2>
+<button class="glyphicon glyphicon-play" id="btnAnyShabad" onclick="RunAnyShabad()" type="button"></button> 
+<button onclick="pauseBhajanAudio()" type="button"><span class="glyphicon glyphicon-pause"></span></button> 
+<button onclick="SelectAnotherShabad()" type="button"><span class="glyphicon glyphicon-step-forward"></span></button> 
+<br />
+
+<div class="horizontal-line"></div>
+<h2 style="color: #FF901E;"> Sleep नींद timer</h2>
+<button class="glyphicon glyphicon-time" id="timeron" onclick="SleepTimerOn()" type="button"></button> 
+<button class="glyphicon glyphicon-off" id="timeroff" onclick="SleepTimerOff()" type="button"></button> 
+<div id="myDIV">TimerOff</div>
+</div>
+
+
+<div class="horizontal-line"></div>
+<div class="text-center">
+<!--<h3 style="color: dodgerblue;">Bhajan भजन शबद playlist</h3>-->
+ <a href="https://www.gurubox.net/p/allbhajanlist.html" target="_blank" style="font-size: 36px;">Bhajan भजन शबद  playlist</a>
+ <div class="horizontal-line"></div>
+ <!--<h3 style="color: dodgerblue;">All Satsang playlist</h3>-->
+ <a href="https://www.gurubox.net/p/allsatsanglist.html" target="_blank" style="font-size: 36px;"> Satsang सत्संग  playlist</a>
+</div>
+
+<script>
+var y = document.getElementById("SatsangAudio"); 
+var z = document.getElementById("GurubaniAudio"); 
+var satsangRadio = document.getElementById("AnyAudio"); 
+var shabadRadio = document.getElementById("ShabadAudio");
+
+var timeoutHandle;
+var btnGurubaniPlay = document.getElementById("gurubaniPlay").getElementsByTagName('span')[0]; 
+var btnAnyRadio = document.getElementById("btnAnyRadioON").getElementsByTagName('span')[0]; 
+var shabadRadioSpan = document.getElementById("btnAnyShabad").getElementsByTagName('span')[0]; 
+
+ var listOfSatsang = ["https://s3.castbox.fm/68/a8/f5/f92ba4415fade70bc67d7e730f.mp3",
+"https://s3.castbox.fm/e9/1d/3f/d0aa2c4c50af058279bf02200d.mp3",
+"https://s3.castbox.fm/da/72/3e/6418de409f96411348aa745980.mp3",
+"https://s3.castbox.fm/10/9e/ec/e522e74708b630e4dd69cccc8c.mp3",
+"https://s3.castbox.fm/76/01/8a/cb428846848fa71c83d994b121.mp3",
+"https://s3.castbox.fm/6e/1e/07/84fa394fd3aab6c0ccb64a8479.mp3",
+"https://s3.castbox.fm/24/c6/a2/bc6e984f8d9a967cb687095cc1.mp3",
+"https://s3.castbox.fm/c8/e7/69/06778c47caa9133ff1dcd4e079.mp3",
+"https://s3.castbox.fm/4c/88/4b/f230a248fa8ed5dac602c9babe.mp3",
+"https://s3.castbox.fm/21/8d/c9/a115c74f54ab818e6cea42dd51.mp3",
+"https://s3.castbox.fm/1e/dc/7b/eab4764d768dc9dbf725865e10.mp3",
+"https://s3.castbox.fm/c1/e0/2c/9252fd482eb8ecdf9eb23435d0.mp3",
+"https://s3.castbox.fm/e5/b6/44/6ed92e4dd78ff1e794384a9f52.mp3",
+"https://s3.castbox.fm/46/89/a7/41ffa74b43aa17cbced341aec2.mp3",
+"https://s3.castbox.fm/26/ea/07/aa8d7a44cb9b2414d96136b008.mp3",
+"https://s3.castbox.fm/9e/38/88/aa42a04b0caa8f1a51dd4c6879.mp3",
+"https://s3.castbox.fm/70/15/e0/60402d41b884df675a96154f4c.mp3",
+"https://s3.castbox.fm/f4/66/7d/d780f1448c8982872ad9756e88.mp3",
+"https://s3.castbox.fm/16/3f/41/d517a646a1abeeed566b338e5e.mp3",
+"https://s3.castbox.fm/f1/f4/55/5ca63f4070a37f3b51ffc68545.mp3",
+"https://s3.castbox.fm/69/7a/1b/462e5b430494f77bdbd1fac56a.mp3",
+"https://s3.castbox.fm/df/ed/63/14a0b740f8b3b2e06f3bd6ec9c.mp3",
+"https://s3.castbox.fm/17/6c/15/32fdbc4da0a6522ccc59c8902c.mp3",
+"https://s3.castbox.fm/34/8d/9e/c168a749f28fd04d4aaaaff68c.mp3",
+"https://s3.castbox.fm/8f/53/67/2187e146248b907d4a0df3fa73.mp3",
+"https://s3.castbox.fm/32/10/91/c8d5b1497db8ba95c0c8d9824f.mp3",
+"https://s3.castbox.fm/76/82/a3/7d87564078b75002e89d0a4397.mp3",
+"https://s3.castbox.fm/c8/3a/31/d25ffc43729b0b1739e12ec469.mp3",
+"https://s3.castbox.fm/11/3d/e5/dd5a24416fbea7e6ea636c9666.mp3",
+"https://s3.castbox.fm/f7/4b/77/cb88944df198434a82606da4f4.mp3",
+"https://s3.castbox.fm/f7/88/1b/db707f452a86846974181cd463.mp3",
+"https://s3.castbox.fm/d8/8a/0f/14f4014afdaf0bb8a562db56cb.mp3",
+"https://s3.castbox.fm/7e/d2/8b/7508b94256b1160ec8cb5fda0b.mp3",
+"https://s3.castbox.fm/26/3c/13/b3dbdb40f4b9952d3ee7b5cf16.mp3",
+"https://s3.castbox.fm/9b/c6/0e/a5b972438d950ac6b0a53dcb83.mp3",
+"https://s3.castbox.fm/74/4d/26/cd11b1471ea612ee62b8b73d56.mp3",
+"https://s3.castbox.fm/d4/18/81/3186d44e55b2d602d106ca5306.mp3",
+"https://s3.castbox.fm/6d/57/f5/8d4427456ca3176c7c910d3427.mp3",
+"https://s3.castbox.fm/f8/eb/a2/3516f84a6aa8995b4baa395250.mp3",
+"https://s3.castbox.fm/8d/e1/96/e13cfa4c09b426d85b85cea376.mp3",
+"https://s3.castbox.fm/a0/58/20/92ebb045d4bb3e903ced0bf339.mp3",
+"https://s3.castbox.fm/7c/1e/3a/1f0b5d4883a50bd45f26e9bb43.mp3",
+"https://s3.castbox.fm/be/6f/dc/dc389f4998a698e0a0d0d03d4a.mp3",
+"https://s3.castbox.fm/45/47/d7/63a7234264a641737a052452ab.mp3",
+"https://s3.castbox.fm/e6/7d/fa/6583f8468daf67803b35f61762.mp3",
+"https://s3.castbox.fm/43/01/50/86440641d4beca23eaef61e476.mp3",
+"https://s3.castbox.fm/b0/75/40/f884bf41a78e7728690826e967.mp3",
+"https://s3.castbox.fm/8d/22/36/768de74765a1402c33910f0324.mp3",
+"https://s3.castbox.fm/49/a7/c6/c70bbf43998609d695fe1a6014.mp3",
+"https://s3.castbox.fm/49/66/9c/2b32b843fd83eda63de0dfbbef.mp3",
+"https://s3.castbox.fm/7b/b5/88/082ee648edb867042b567a2f6b.mp3",
+"https://s3.castbox.fm/54/a7/64/163a8d4c2c88be0b96d837dd16.mp3",
+"https://s3.castbox.fm/41/86/74/a6cc764aa7b3d7e720686ff9bb.mp3",
+"https://s3.castbox.fm/8d/f5/d7/7857ee4946a10edc82f1ea9407.mp3",
+"https://s3.castbox.fm/8b/d0/d9/4a706f40a6ae9f99842f9f3f65.mp3",
+"https://s3.castbox.fm/9b/88/24/d17e704550af8d783e0d5a27a7.mp3",
+"https://s3.castbox.fm/18/47/57/e1ec9748afa067f6e94c36ec83.mp3",
+"https://s3.castbox.fm/85/1b/96/4c031444b7ae9e89f5c55a53c1.mp3",
+"https://s3.castbox.fm/6f/2a/7f/2e3eb442f3a9fd4e157ca2f3ff.mp3",
+"https://s3.castbox.fm/fd/2b/d4/7ac92f4a96a7bdec804548663a.mp3",
+"https://s3.castbox.fm/c8/b7/16/6cbc864bc69306fef64c28815b.mp3",
+"https://s3.castbox.fm/06/0e/bc/e24d1043ac881c76dbda7ff567.mp3",
+"https://s3.castbox.fm/c1/11/85/25b13941b88aeda10b981eb4d6.mp3"];
+					  
+
+var listOfShabad = ["https://s3.castbox.fm/0c/0e/a7/ffbf5345eb84cdc49c2395e094.mp3",
+"https://s3.castbox.fm/82/e2/a9/5fb6d64b3ea6d786be7348c2cb.mp3",
+"https://s3.castbox.fm/19/b4/58/5b7c914c309d1b4cd4b41237d3.mp3",
+"https://s3.castbox.fm/7d/9c/67/207bfd417c974167f45ab9e26b.mp3",
+"https://s3.castbox.fm/35/6e/cd/d6a38c485fbbd2320ef3a4d7d3.mp3",
+"https://s3.castbox.fm/c5/d0/ac/506fd648108fdc57a0b5a112d4.mp3",
+"https://s3.castbox.fm/08/d3/69/58c9fe440194a068f1c7f7dbfd.mp3",
+"https://s3.castbox.fm/a5/59/bf/47c47949359c2d252fede112aa.mp3",
+"https://s3.castbox.fm/1d/8a/33/8b00914e2c9300c0c8bc66527b.mp3",
+"https://s3.castbox.fm/de/99/4d/a0709e4f7fba09895bc6920303.mp3",
+"https://s3.castbox.fm/9d/87/9a/129785459096175b2dc3f747fe.mp3",
+"https://s3.castbox.fm/41/f8/a2/265a704c64b978a474c6add30a.mp3",
+"https://s3.castbox.fm/92/09/f0/e1ceea43fbaad5598e6ae0f34c.mp3",
+"https://s3.castbox.fm/d4/e0/18/e3077e4799942235a346716399.mp3",
+"https://s3.castbox.fm/ad/31/b7/3308a04784bd35c1abd3fbe4a9.mp3",
+"https://s3.castbox.fm/aa/ee/b2/632b9f4572b5751b94c074d23f.mp3",
+"https://s3.castbox.fm/c0/d2/29/dd180744a4ac122cbf92ce2417.mp3",
+"https://s3.castbox.fm/7a/ee/dd/1d8474465b8eab9130a9cae6d5.mp3",
+"https://s3.castbox.fm/ff/92/29/f1e5834eaeb1f31e160c063ae9.mp3",
+"https://s3.castbox.fm/7e/4b/af/1b3fab4f148375450f84352ce9.mp3",
+"https://s3.castbox.fm/7f/a0/1a/2ca76c4a2599d8766966bd468e.mp3",
+"https://s3.castbox.fm/b4/3d/cb/3040c84025b6000e771b7811a6.mp3",
+"https://s3.castbox.fm/27/22/28/c42b2c4fdabbb0775938bb2c22.mp3",
+"https://s3.castbox.fm/be/ce/ec/421c1e41fbbff202a07fd84068.mp3",
+"https://s3.castbox.fm/bc/9e/78/8867a54d2daa1c90ea324c4676.mp3",
+"https://s3.castbox.fm/0b/4d/2b/a39c364223bca1353962bc5c65.mp3",
+"https://s3.castbox.fm/a8/4c/87/e54477450f8300ff0a89cbf16a.mp3",
+"https://s3.castbox.fm/82/e4/4f/41a54d4127b0b300cc0f30d12d.mp3",
+"https://s3.castbox.fm/20/3c/c1/605b164301a22b90819d499909.mp3",
+"https://s3.castbox.fm/ca/f5/92/936435408eb6454754bb368bdd.mp3",
+"https://s3.castbox.fm/2e/56/8c/f1df3f4b169ece129a240c8cee.mp3",
+"https://s3.castbox.fm/de/67/47/7ee3154006a067cd6d2714d331.mp3",
+"https://s3.castbox.fm/2f/e5/76/ec5d754df6bb0f55a7d94a6536.mp3",
+"https://s3.castbox.fm/ae/aa/92/bdfeb8410f83fcb8cf00bbf4d2.mp3",
+"https://s3.castbox.fm/40/78/b0/dcda09451b8518636e5438a78a.mp3",
+"https://s3.castbox.fm/c8/b1/18/66959048d4b0e80daba50a2b3d.mp3",
+"https://s3.castbox.fm/1c/27/2a/415c18441d97a64a652cd08ad0.mp3",
+"https://s3.castbox.fm/49/36/b2/c3b8b74b7295e5d85dfabc575e.mp3",
+"https://s3.castbox.fm/c4/e2/66/3aaa724076ae756e20bf853a22.mp3",
+"https://s3.castbox.fm/d8/60/fb/b06fbf4269b0a0c2190e56e8e1.mp3",
+"https://s3.castbox.fm/be/2f/28/68573a49c68d32868c6b76664b.mp3",
+"https://s3.castbox.fm/29/3b/7a/ec050442b8b458ed661975ed68.mp3",
+"https://s3.castbox.fm/4e/3e/b5/eb46684bff81a84e9ff113c5cb.mp3",
+"https://s3.castbox.fm/59/a8/04/a3b619401d92a2d38d3aadb673.mp3",
+"https://s3.castbox.fm/57/3d/d1/eec07b44a0b2cd6c106b0a7611.mp3",
+"https://s3.castbox.fm/66/da/f1/6bda494c7291e43f49da454d41.mp3",
+"https://s3.castbox.fm/75/50/a2/05fb73470b8946f8be1967cc7d.mp3",
+"https://s3.castbox.fm/c1/5f/48/40a985403597ed4d54ffb00e96.mp3",
+"https://s3.castbox.fm/02/ea/f8/7b4a7a41069df1113373b3b53a.MP3",
+"https://s3.castbox.fm/9f/71/7f/cea1e0476c965d6b0d9ebfc7e2.MP3",
+"https://s3.castbox.fm/44/04/e2/a69dae458daab59e702ac1c75b.MP3",
+"https://s3.castbox.fm/2d/a6/bc/b82c3b41008d2d636004a5480f.MP3",
+"https://s3.castbox.fm/d1/a0/ee/1a00ee48e8a7b9c7759b2086b7.MP3",
+"https://s3.castbox.fm/1e/14/55/d1195249b9b6ac21b3ebadae08.mp3",
+"https://s3.castbox.fm/2f/1a/8f/77d49a409794431eeb76918512.mp3",
+"https://s3.castbox.fm/ca/43/a0/5261ca4cce91c9f1d9803d0856.mp3"];
+
+					  
+function playBhajanAudio() 
+{ 
+  pauseAllAudio();
+  x.play(); 
+  btnBhajanPlay.style.color='#00FF00';
+} 
+
+
+function pauseBhajanAudio() 
+{ 
+  pauseAllAudio();
+}
+
+function playSatsangAudio() 
+{ 
+  pauseAllAudio();
+  y.play(); 
+  <!-- btnSatsangPlay.style.color='#00FF00'; -->
+} 
+
+function ShabadRadio()
+{
+  pauseAllAudio();
+  ShabadAudio.play(); 
+  btnAnyShabad.style.color='#00FF00';
+}
+function pauseSatsangAudio() 
+{ 
+  pauseAllAudio();
+}
+
+function playGurubaniAudio() 
+{ 
+  pauseAllAudio();
+  waitMessage();
+  if (location.protocol === 'https:') {
+     z.setAttribute('src', 'https://gurbanikirtan.radioca.st/start.mp3');
+  }
+  z.setAttribute('src', 'https://gurbanikirtan.radioca.st/start.mp3');
+  z.play();
+  btnGurubaniPlay.style.color='#00FF00';
+} 
+
+function pauseGurubaniAudio() 
+{ 
+  pauseAllAudio();
+}
+
+function pauseAllAudio() 
+ { 
+    <!-- x.pause();  -->
+    y.pause(); 
+    z.pause(); 
+    satsangRadio.pause();
+	ShabadAudio.pause();
+    btnGurubaniPlay.style.color='#000000';
+	btnAnyRadioON.style.color='#000000';
+	btnAnyShabad.style.color='#000000';
+}
+
+function SleepTimerOn() 
+{ 
+    var myDiv = document.getElementById("myDIV");
+    myDiv.innerHTML = "Radio will stop after 30 minutes.";
+    document.getElementById("timeron").style.color = "mediumseagreen";
+    myDiv.style.color = "red";
+	  myDiv.style.fontWeight = "bold";
+    var delayTimer = 1800000;
+    timeoutHandle = setTimeout(function() { pauseAllAudio(); SleepTimerOff()}, delayTimer);
+}
+
+function SleepTimerOff() 
+{ 
+    var myDiv = document.getElementById("myDIV");
+    myDiv.innerHTML = "Sleep Timer is Off";
+    myDiv.style.color = "black";
+    clearTimeout(timeoutHandle);
+    document.getElementById("timeron").style.color = "";
+}
+
+function RunAnyRadio()
+{
+  
+  pauseAllAudio();
+  var index = Math.floor(Math.random()*(listOfSatsang.length));
+  var randomRadio = listOfSatsang[index];
+  console.log(index);
+  satsangRadio.src = randomRadio;
+  console.log("satsangRadio.paused:" + satsangRadio.paused);
+
+  var isPlaying = !satsangRadio.paused;
+
+  console.log("isPlaying:" + isPlaying);
+  if (!isPlaying) {
+    satsangRadio.play();
+	btnAnyRadioON.style.color='#00FF00';
+  }
+  
+}
+
+function SelectAnotherBhajan(){
+  console.log("selectAnotherBhajan");
+  satsangRadio.pause();
+  RunAnyRadio();
+}
+function SelectAnotherShabad(){
+  console.log("selectAnotherShabad");
+  shabadRadio.pause();
+  RunAnyShabad();
+}
+
+
+function RunAnyShabad()
+{
+  
+  pauseAllAudio();
+  var index = Math.floor(Math.random()*(listOfShabad.length));
+  var randomRadio = listOfShabad[index];
+  console.log(index);
+  shabadRadio.src = randomRadio;
+  console.log("shabadRadio.paused:" + shabadRadio.paused);
+
+  var isPlaying = !shabadRadio.paused;
+
+  console.log("isPlaying:" + isPlaying);
+  if (!isPlaying) {
+    shabadRadio.play();
+	btnAnyShabad.style.color='#00FF00';
+  }
+  
+}
+
+function waitMessage()
+{
+    var waitDiv = document.getElementById("waitDiv");
+    waitDiv.innerHTML = "सत्संग ,भजन और गुरुबाणी ऑडियो चलाया जा रहा है, कृपया प्रतीक्षा करें...";	
+	waitDiv.style.display = "none";
+}
+
+</script>
+
+
+
+</body>
+</html>
+
+
+<style>
+
+    #maincontents{
+      margin-top: 40px;
+    }
+    button{
+      padding: 20px;
+      margin-right: 20px;
+      border-radius: 42px;
+    }
+    
+    .glyphicon {
+      font-size: 36px;
+    }
+    .horizontal-line{
+      background: #d2d2cf;
+      height: 2px;
+      margin: 10px auto;
+      width: 80%;
+    }
+    #alternative-div{
+      padding-bottom: 20px;
+      padding-top: 10px;
+    }
+  .tabs-inner .widget li a{
+    border-bottom:0;
+    padding:1em 1.5em;
+  }
+    </style>
+
+<p>&nbsp;
+  
+
+</p>
